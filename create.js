@@ -3,20 +3,16 @@ var testnet = require('./testnet');
 var pass = process.argv[2];
 
 if ("undefined" === typeof pass) {
-	console.log("Usage: node create.js <password>");
+	console.log("Usage: node create.js <password>\n" +
+	"Creates a new account and logs encrypted private key to the console.\n" +
+	"Can be used to generate account.dat as follows:\n"+
+	"node create.js <password> > account.dat.");
 	process.exit(1);
 }
 
-testnet.eth.personal.newAccount(pass).then(function(result) {
-	if (false === result) {
-		console.log("Account not created");
-		process.exit(1);
-	}
+var account = testnet.eth.accounts.create();
 
-	var account = {
-		id:result,
-		password:pass
-	};
+var aes256 = require('nodejs-aes256');
+var data = aes256.encrypt(pass, account.privateKey);
 
-	console.log(JSON.stringify(account));
-});
+console.log(data);
