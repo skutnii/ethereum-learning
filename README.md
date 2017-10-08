@@ -1,6 +1,6 @@
 Test project for learning ethereum blockchain. A simple nodejs wallet working from command line.
 
-# Initialization
+# Setup
 
 ## Install dependencies
 
