@@ -2,6 +2,12 @@ Test project for learning ethereum blockchain. A simple nodejs wallet working fr
 
 # Initialization
 
+## Install dependencies
+
+> $ npm install
+
+## Create account
+
 To start, you need to generate account.dat as follows:
 
 > $ node create.js &lt;password&gt; > account.dat.
