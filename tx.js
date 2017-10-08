@@ -12,8 +12,8 @@ function sendTx(rawTx, account) {
 		var txData = '0x' + tx.serialize().toString('hex');
 		console.log("Sending raw:", txData);
 
-		eth.sendSignedTransaction(txData).
-		on('transactionHash', function(hash){
+		eth.sendSignedTransaction(txData)
+		.on('transactionHash', function(hash){
 	    	console.log("Transaction hash:", hash);
 		})
 		.on('receipt', function(receipt){
