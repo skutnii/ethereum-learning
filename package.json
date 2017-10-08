@@ -1,6 +1,6 @@
 {
   "name": "ethereum",
-  "version": "1.0.0",
+  "version": "0.1.0",
   "description": "Ethereum test project",
   "main": "index.js",
   "repository": "https://github.com/skutnii/ethereum-learning.git",
