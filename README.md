@@ -28,7 +28,7 @@ You will be prompted for the password with which private key in account.dat was 
 
 # Send ether
 
-> $ node send.js <amount> <address>
+> $ node send.js &lt;amount&gt; &lt;address&gt;
 
 Sends &lt;amount&gt; ether to &lt;address&gt;.
 You will be prompted for the password with which private key in account.dat was encrypted.
