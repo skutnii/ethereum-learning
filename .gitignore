@@ -1,6 +1,5 @@
 **/.DS_Store
-account.dat
-
+accounts/**
 
 # Logs
 logs

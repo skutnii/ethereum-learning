@@ -1,18 +1,24 @@
 var testnet = require('./testnet');
+var input = require('./input');
 
-var pass = process.argv[2];
+var file = "";
+input.ask("Enter destination file path.\n")
+.then(function(answer) {
+	file = answer;
+	return input.askPrivate("Enter encryption password.\n");
+})
+.then(function(pass) {
+	try {
+		var account = testnet.eth.accounts.create();
 
-if ("undefined" === typeof pass) {
-	console.log("Usage: node create.js <password>\n" +
-	"Creates a new account and logs encrypted private key to the console.\n" +
-	"Can be used to generate account.dat as follows:\n"+
-	"node create.js <password> > account.dat.");
-	process.exit(1);
-}
+		var aes256 = require('nodejs-aes256');
+		var data = aes256.encrypt(pass, account.privateKey);
+		require('fs').writeFileSync(file, data, {
+			flag: "wx"
+		});
 
-var account = testnet.eth.accounts.create();
-
-var aes256 = require('nodejs-aes256');
-var data = aes256.encrypt(pass, account.privateKey);
-
-console.log(data);
+		console.log("Successfully wrote to", file + '.');
+	} catch (error) {
+		console.log(error);
+	}
+});

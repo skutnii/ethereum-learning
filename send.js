@@ -4,36 +4,45 @@ var utils = testnet.utils;
 
 var fs = require('fs');
 
-if (process.argv.length < 4) {
-	console.log("Usage: node send.js <amount> <account>.\n", 
-		"Sends <amount> ethereum to <account>.\n",
-		"The sender account must be defined in account.dat file.\n",
-		"Use create.js to generate it.");
-	process.exit(1);
-}
+var gasPrice = parseInt(eth.gasPrice);
+var gasPriceHex = utils.toHex(gasPrice);
 
-var amount = process.argv[2];
-var dest = process.argv[3];
+var rawTx = {
+	nonce: "",
+	to: "",
+	amount: "",
+	gasLimit: "",
+	gasPrice:gasPriceHex,
+	data: '0x000000000',
+	chainId: utils.toHex(testnet.version.network)
+};
 
-require('./account').read().then(function(account) {
-	console.log("Starting...");
+var account = null;
+var input = require('./input');
 
-	eth.getTransactionCount(account.address).then(function(count) {
-		console.log('Transaction count:', count);
-
-		var gasPrice = parseInt(eth.gasPrice);
-		var gasPriceHex = utils.toHex(gasPrice);
-		var rawTx = {
-			nonce: utils.toHex(count),
-			to: dest,
-			amount: utils.toWei(amount, "ether"),
-			gasLimit: utils.toHex(35000),
-			data: '0x00',
-  			chainId: utils.toHex(testnet.version.network)
-  		};
-
-		require('./tx').send(rawTx, account);
-	});
-});
+input.ask("Enter amount.\n")
+.then(function(amount) {
+	rawTx.amount = utils.toWei(amount, "ether");
+	return input.ask("Enter destination address.\n");
+})
+.then(function(to) {
+	rawTx.to = to;
+	return input.ask("Enter gas limit.\n");
+})
+.then(function(gas) {
+	rawTx.gasLimit = utils.toHex(gas);
+	return require('./account').read();
+})
+.then(function(acc) {
+	account = acc;
+	console.log("Sending from account", account.address + "...");
+	return eth.getTransactionCount(account.address);
+})
+.then(function(count) {
+	rawTx.nonce = utils.toHex(count);
+	console.log('Transaction count:', count);
+	require('./tx').send(rawTx, account);
+})
+.catch(console.log);
 
 

@@ -22,14 +22,14 @@ function sendTx(rawTx, account) {
 		.on('confirmation', function(confirmationNumber, receipt){ 
 			console.log("Confirmation ", confirmationNumber, "for receipt", receipt);
 		})
-		.on('error', console.error)
+		.on('error', console.log)
 		.then(function(result) {
-			console.log(result);
+			console.log("Success\n", result);
 		}).catch(function(error) {
 			console.log(error);
 		});
 	} catch(error) {
-		console.error(error);
+		console.log(error);
 	}
 }
 
