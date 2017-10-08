@@ -8,7 +8,7 @@ Test project for learning ethereum blockchain. A simple nodejs wallet working fr
 
 ## Create account
 
-To start, you need to generate account.dat as follows:
+To start, you need to generate at least one account as follows:
 
 > $ node create.js.
 
