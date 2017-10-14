@@ -4,25 +4,21 @@ var utils = testnet.utils;
 
 var fs = require('fs');
 
-var gasPrice = parseInt(eth.gasPrice);
-var gasPriceHex = utils.toHex(gasPrice);
-
 var rawTx = {
 	nonce: "",
 	to: "",
-	amount: "",
+	value: "",
 	gasLimit: "",
-	gasPrice:gasPriceHex,
-	data: '0x000000000',
+	gasPrice:"",
 	chainId: utils.toHex(testnet.version.network)
 };
 
-var account = null;
 var input = require('./input');
 
 input.ask("Enter amount.\n")
 .then(function(amount) {
-	rawTx.amount = utils.toWei(amount, "ether");
+	var wei = utils.toHex(utils.toWei(amount, "ether"));
+	rawTx.value = wei;
 	return input.ask("Enter destination address.\n");
 })
 .then(function(to) {
@@ -31,6 +27,12 @@ input.ask("Enter amount.\n")
 })
 .then(function(gas) {
 	rawTx.gasLimit = utils.toHex(gas);
+	return input.ask("Enter gas price (in gwei)\n");
+})
+.then(function(price) {
+	var wei = utils.toWei(price, "gwei");
+	var gasPrice = parseInt(wei);
+	rawTx.gasPrice = utils.toHex(gasPrice);
 	return require('./account').read();
 })
 .then(function(acc) {
